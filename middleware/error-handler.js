@@ -1,5 +1,4 @@
 import { StatusCodes } from "http-status-codes";
-import {useState} from 'react';
 
 const errorHandlerMiddleware = (err, req, res, next) => {
   console.log(err);
