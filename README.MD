@@ -4480,7 +4480,7 @@ import React, { useState } from 'react'
 import BarChart from './BarChart'
 import AreaChart from './AreaChart'
 import { useAppContext } from '../context/appContext'
-import Wrapper from '../assets/wrappers/ChartsContainer'
+import Wrapper from '../assets/wrapperchas/ChartsContainer'
 
 export default function ChartsContainer() {
   const [barChart, setBarChart] = useState(true)
