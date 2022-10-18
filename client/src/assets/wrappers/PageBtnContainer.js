@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components";
 
 const Wrapper = styled.section`
   height: 6rem;
@@ -15,7 +15,7 @@ const Wrapper = styled.section`
   .pageBtn {
     background: transparent;
     border-color: transparent;
-    width: 50px;
+    width: 40px;
     height: 40px;
     font-weight: 700;
     font-size: 1.25rem;
@@ -30,7 +30,7 @@ const Wrapper = styled.section`
   }
   .prev-btn,
   .next-btn {
-    width: 100px;
+    width: 50px;
     height: 40px;
     background: var(--white);
     border-color: transparent;
@@ -50,5 +50,5 @@ const Wrapper = styled.section`
     background: var(--primary-500);
     color: var(--white);
   }
-`
-export default Wrapper
+`;
+export default Wrapper;
