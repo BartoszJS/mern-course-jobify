@@ -26,6 +26,7 @@ import {
   EDIT_JOB_SUCCESS,
   SHOW_STATS_BEGIN,
   SHOW_STATS_SUCCESS,
+  CLEAR_FILTERS,
 } from "./actions";
 
 import { initialState } from "./appContext";
@@ -219,7 +220,6 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: true,
-
     };
   }
   if (action.type === EDIT_JOB_SUCCESS) {
@@ -229,7 +229,7 @@ const reducer = (state, action) => {
 
       showAlert: true,
       alertType: "success",
-      alertText: 'Job updated!',
+      alertText: "Job updated!",
     };
   }
   if (action.type === EDIT_JOB_ERROR) {
@@ -245,7 +245,7 @@ const reducer = (state, action) => {
     return {
       ...state,
       isLoading: true,
-      showAlert:false,
+      showAlert: false,
     };
   }
   if (action.type === SHOW_STATS_SUCCESS) {
@@ -254,6 +254,15 @@ const reducer = (state, action) => {
       isLoading: false,
       stats: action.payload.stats,
       monthlyApplications: action.payload.monthlyApplications,
+    };
+  }
+  if (action.type === CLEAR_FILTERS) {
+    return {
+      ...state,
+      search: "",
+      searchStatus: "all",
+      searchType: "all",
+      sort: "latest",
     };
   }
   throw new Error(`no such action : ${action.type}`);

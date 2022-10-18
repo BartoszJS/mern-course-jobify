@@ -29,6 +29,7 @@ import {
   EDIT_JOB_SUCCESS,
   SHOW_STATS_SUCCESS,
   SHOW_STATS_BEGIN,
+  CLEAR_FILTERS,
 } from "./actions";
 
 const token = localStorage.getItem("token");
@@ -57,8 +58,13 @@ const initialState = {
   totalJobs: 0,
   numOfPages: 1,
   page: 1,
-  stats:{},
+  stats: {},
   monthlyApplications: [],
+  search: "",
+  searchStatus: "all",
+  searchType: "all",
+  sort: "latest",
+  sortOptions: ["latest", "oldest", "a-z", "z-a"],
 };
 
 const AppContext = React.createContext();
@@ -216,7 +222,12 @@ const AppProvider = ({ children }) => {
   };
 
   const getJobs = async () => {
-    let url = `/jobs`;
+    const { search, searchStatus, searchType, sort } = state;
+
+    let url = `/jobs?status=${searchStatus}&jobType=${searchType}&sort=${sort}`;
+    if (search) {
+      url = url + `&search=${search}`;
+    }
 
     dispatch({ type: GET_JOBS_BEGIN });
     try {
@@ -251,7 +262,7 @@ const AppProvider = ({ children }) => {
         jobType,
         status,
       });
-      dispatch({type: EDIT_JOB_SUCCESS})
+      dispatch({ type: EDIT_JOB_SUCCESS });
       dispatch({ type: CLEAR_VALUES });
     } catch (error) {
       if (error.response.status === 401) return;
@@ -260,7 +271,7 @@ const AppProvider = ({ children }) => {
         payload: { msg: error.response.data.msg },
       });
     }
-    clearAlert()
+    clearAlert();
   };
   const deleteJob = async (jobId) => {
     dispatch({ type: DELETE_JOB_BEGIN });
@@ -269,24 +280,30 @@ const AppProvider = ({ children }) => {
       getJobs();
     } catch (error) {
       console.log(error.response);
-      logoutUser()
+      logoutUser();
     }
   };
-const showStats = async () => {
-  dispatch({type: SHOW_STATS_BEGIN})
-  try {
-    const {data} = await authFetch('/jobs/stats')
-    dispatch ({type: SHOW_STATS_SUCCESS, 
-      payload:{
-      stats: data.defaultStats,
-      monthlyApplications: data.monthlyApplications,
-    },
-  })
-  } catch (error) {
-    console.log(error.response);
-    //logoutUser();
-  }
-}
+  const showStats = async () => {
+    dispatch({ type: SHOW_STATS_BEGIN });
+    try {
+      const { data } = await authFetch("/jobs/stats");
+      dispatch({
+        type: SHOW_STATS_SUCCESS,
+        payload: {
+          stats: data.defaultStats,
+          monthlyApplications: data.monthlyApplications,
+        },
+      });
+    } catch (error) {
+      console.log(error.response);
+      //logoutUser();
+    }
+  };
+
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -305,6 +322,7 @@ const showStats = async () => {
         deleteJob,
         editJob,
         showStats,
+        clearFilters,
       }}
     >
       {children}
